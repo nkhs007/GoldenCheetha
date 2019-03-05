@@ -88,16 +88,12 @@ jobject Java_com_svlabs_svt_ride_SaarRideFileReader_readFile(JNIEnv * env, jobje
              env->SetDoubleField(jniRidePoint,jniRidePointStruct->km,eachPoint->km);
              env->SetDoubleField(jniRidePoint,jniRidePointStruct->lon,eachPoint->lon);
              env->SetDoubleField(jniRidePoint,jniRidePointStruct->lat,eachPoint->lat);
-
              env->SetDoubleField(jniRidePoint,jniRidePointStruct->cad,eachPoint->cad);
              env->SetDoubleField(jniRidePoint,jniRidePointStruct->rcad,eachPoint->rcad);
              env->SetDoubleField(jniRidePoint,jniRidePointStruct->kph,eachPoint->kph);
              env->SetDoubleField(jniRidePoint,jniRidePointStruct->watts,eachPoint->watts);
              env->SetDoubleField(jniRidePoint,jniRidePointStruct->alt,eachPoint->alt);
-
              env->SetDoubleField(jniRidePoint,jniRidePointStruct->temp,eachPoint->temp);
-             env->SetDoubleField(jniRidePoint,jniRidePointStruct->tcore,eachPoint->tcore);
-             env->SetDoubleField(jniRidePoint,jniRidePointStruct->slope,eachPoint->slope);
              env->SetObjectArrayElement(jiniRidePointArray, i, jniRidePoint);
              //qDebug()<<"Adding :"<<i;
         }

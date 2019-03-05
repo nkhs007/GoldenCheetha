@@ -32,7 +32,7 @@ void _initMatricValueStructure(JNIEnv *env){
 }
 void jniConvertRidePoints(JNIEnv *env,jobject gen,RideFile *rideFile){
 
-     qDebug() << "Start converting the Points";
+    qDebug() << "matricsinterface.h : jniConvertRidePoints : Start converting";
     //com.svlabs.svt.matrics.SaarMatricsGenerator
     jclass genrator=env->GetObjectClass(gen);
     if( genrator != NULL){
@@ -48,9 +48,9 @@ void jniConvertRidePoints(JNIEnv *env,jobject gen,RideFile *rideFile){
     }
     jobjectArray pointsToCal = (jobjectArray)env->CallObjectMethod(gen, methodId);
     if(pointsToCal != NULL){
-        qDebug() << "Not able call the method getRidePoints";
-    }else{
         qDebug() << "call to getRidePoints done";
+    }else{
+        qDebug() << "Not able call the method getRidePoints";
     }
     jsize length = env->GetArrayLength(pointsToCal);
     qDebug() << "Points to analysis : " << length;
@@ -115,17 +115,17 @@ void jniConvertRidePoints(JNIEnv *env,jobject gen,RideFile *rideFile){
     jdouble recIntSecs = env->CallDoubleMethod(gen, getRecIntSecsMethodId);
     rideFile->setRecIntSecs(recIntSecs);
 
-    //QString *sport = new QString("Sport");
-    jmethodID getSportMethodId = env->GetMethodID(genrator, "getSport", "()Ljava.lang.String;");
+    jmethodID getSportMethodId = env->GetMethodID(genrator, "getSport", "()Ljava/lang/String;");
     if( getSportMethodId != NULL){
         qDebug() << "Got getSport Method";
     }else {
         qDebug() << "Not able to get getSport method";
     }
     jstring sport = (jstring) env->CallObjectMethod(gen, getSportMethodId);
-    QString *sportString = new QString();
-    rideFile->setTag(*sportString, "run");
+    QString sportString = env->GetStringUTFChars(sport, 0);
+    rideFile->setTag("Sport", sportString);
 
+    qDebug() << "matricsinterface.h : jniConvertRidePoints : Returning from the method";
 }
 void jniGetMatricsToCalculate(JNIEnv *env,jobject gen){
     jclass genrator=env->GetObjectClass(gen);

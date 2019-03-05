@@ -945,9 +945,7 @@ class AvgSpeed : public RideMetric {
 
         assert(deps.contains("total_distance"));
         km = deps.value("total_distance")->value(true);
-
         if (item->ride()->areDataPresent()->kph) {
-
             secsMoving = 0;
 
             RideFileIterator it(item->ride(), spec);
@@ -955,11 +953,9 @@ class AvgSpeed : public RideMetric {
                 struct RideFilePoint *point = it.next();
                 if (point->kph > 0.0) secsMoving += item->ride()->recIntSecs();
             }
-
             setValue(secsMoving ? km / secsMoving * 3600.0 : 0.0);
 
         } else {
-
             // backup to duration if there is no speed channel
             assert(deps.contains("workout_time"));
             secsMoving = deps.value("workout_time")->value(true);
@@ -1332,7 +1328,7 @@ struct AvgCoreTemp : public RideMetric {
     }
 
     void compute(RideItem *item, Specification spec, const QHash<QString,RideMetric*> &) {
-
+        qDebug() << "BASICRIDEMETRIC.cpp : AvgCoreTemp : Begin";
         // no ride or no samples
         if (spec.isEmpty(item->ride())) {
             setValue(RideFile::NIL);
@@ -1345,12 +1341,13 @@ struct AvgCoreTemp : public RideMetric {
         RideFileIterator it(item->ride(), spec);
         while (it.hasNext()) {
             struct RideFilePoint *point = it.next();
-
+            //qDebug() << "BASICRIDEMETRIC.cpp : AvgCoreTemp : point->tcore = " << point->tcore;
             if (point->tcore > 0) {
                 total += point->tcore;
                 ++count;
             }
         }
+        qDebug() << "BASICRIDEMETRIC.cpp : AvgCoreTemp : total tcore = " << total;
         setValue(count > 0 ? total / count : 0);
         setCount(count);
     }

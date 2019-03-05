@@ -893,6 +893,7 @@ RideFile *RideFileFactory::openRideFile(Context *context, QFile &file,
 
         // reset timestamps and distances to always start from zero
         double timeOffset=0.00f, kmOffset=0.00f;
+        qDebug() << "RideFile.cpp : openRideFile : dataPoints count = " << result->dataPoints().count();
         if (result->dataPoints().count()) {
             timeOffset=result->dataPoints()[0]->secs;
             kmOffset=result->dataPoints()[0]->km;

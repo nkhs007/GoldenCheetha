@@ -1446,6 +1446,8 @@ struct FitFileReaderState
                 continue;
 
             int native_num = field.num;
+            //qDebug() << "FitRideFile.cpp : decodeRecord : native_num = " << native_num;
+
             bool native_profile = true;
 
             if (field.deve_idx>-1) {
@@ -1559,12 +1561,12 @@ struct FitFileReaderState
                     //case 40: // GROUND CONTACT TIME PERCENT
                              //break;
 
-                    case 41: // GROUND CONTACT TIME
+                    case 41: // GROUND CONTACT TIME  
                              if (!native_profile && field.deve_idx>-1)
                                  rcontact = deve_value;
                              else
                                 rcontact = value / 10.0f;
-                             break;
+                            break;
 
                     //case 42: // ACTIVITY_TYPE
                     //         // TODO We should know/test value for run
@@ -2050,6 +2052,7 @@ struct FitFileReaderState
     /* weather broadcast as observed at weather station (undocumented) */
     void decodeWeather(const FitDefinition &def, int time_offset,
                       const std::vector<FitValue>& values) {
+        qDebug() << "FitRideFile.cpp : decodeWeather";
         Q_UNUSED(time_offset);
 
         time_t time = 0;
@@ -2860,12 +2863,12 @@ struct FitFileReaderState
     }
 
     RideFile * run() {
-
+        qDebug() << "FitRideFile.cpp : run";
         // get the Smart Recording parameters
         //SaarComment
-        isGarminSmartRecording = QVariant(2);//appsettings->value(NULL, GC_GARMIN_SMARTRECORD,Qt::Checked);
+        isGarminSmartRecording = QVariant(true);//appsettings->value(NULL, GC_GARMIN_SMARTRECORD,Qt::Checked);
         //SaarComment
-        GarminHWM =QVariant(1); //appsettings->value(NULL, GC_GARMIN_HWMARK);
+        GarminHWM = QVariant();//appsettings->value(NULL, GC_GARMIN_HWMARK);
         if (GarminHWM.isNull() || GarminHWM.toInt() == 0) GarminHWM.setValue(25); // default to 25 seconds.
 
         // start

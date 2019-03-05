@@ -103,16 +103,28 @@ void jniConvertRidePoints(JNIEnv *env,jobject gen,RideFile *rideFile){
         point.setValue(RideFile::temp,env->GetDoubleField(jRidePoint,jtempFeild));
         //qDebug() << "jtempFeild done";
 
-        jfieldID jtcoreFeild = env->GetFieldID(jRidePointClass,"tcore","D");
-        point.setValue(RideFile::tcore,env->GetDoubleField(jRidePoint,jtcoreFeild));
-        //qDebug() << "jtcoreFeild done";
-
-        jfieldID jslopeFeild = env->GetFieldID(jRidePointClass,"slope","D");
-        point.setValue(RideFile::slope,env->GetDoubleField(jRidePoint,jslopeFeild));
-        //qDebug() << "jslopeFeild done";
-
         rideFile->appendPoint(point);
     }
+
+    jmethodID getRecIntSecsMethodId = env->GetMethodID(genrator, "getRecIntSecs", "()D");
+    if( getRecIntSecsMethodId != NULL){
+        qDebug() << "Got getRecIntSecs Method";
+    }else {
+        qDebug() << "Not able to get getRecIntSecs method";
+    }
+    jdouble recIntSecs = env->CallDoubleMethod(gen, getRecIntSecsMethodId);
+    rideFile->setRecIntSecs(recIntSecs);
+
+    //QString *sport = new QString("Sport");
+    jmethodID getSportMethodId = env->GetMethodID(genrator, "getSport", "()Ljava.lang.String;");
+    if( getSportMethodId != NULL){
+        qDebug() << "Got getSport Method";
+    }else {
+        qDebug() << "Not able to get getSport method";
+    }
+    jstring sport = (jstring) env->CallObjectMethod(gen, getSportMethodId);
+    QString *sportString = new QString();
+    rideFile->setTag(*sportString, "run");
 
 }
 void jniGetMatricsToCalculate(JNIEnv *env,jobject gen){

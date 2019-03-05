@@ -226,7 +226,7 @@ class BikeStress : public RideMetric {
     }
 
     void compute(RideItem *item, Specification, const QHash<QString,RideMetric*> &deps) {
-
+        qDebug() << "Coggan.cpp : BikeStress : compute : L-229";
         // run, swim or no zones
         if (item->isSwim || item->isRun ||
            !item->context->athlete->zones(item->isRun) || item->zoneRange < 0) {
@@ -234,7 +234,7 @@ class BikeStress : public RideMetric {
             setCount(0);
             return;
         }
-
+        qDebug() << "Coggan.cpp : BikeStress : compute : L-237";
         assert(deps.contains("coggan_np"));
         assert(deps.contains("coggan_if"));
         IsoPower *np = dynamic_cast<IsoPower*>(deps.value("coggan_np"));

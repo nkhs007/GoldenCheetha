@@ -19,6 +19,7 @@ typedef struct _RideFilePoint {
     jfieldID watts;
     jfieldID alt;
     jfieldID temp;
+    jfieldID slope;
 }_RideFilePoint;
 
 typedef struct _svtRideFile {
@@ -92,6 +93,7 @@ void createRideFilePointJavaObject(JNIEnv *env){
     jniRidePointStruct->watts = env->GetFieldID(jniRidePointStruct->cls, "watts", "D");
     jniRidePointStruct->alt = env->GetFieldID(jniRidePointStruct->cls, "alt", "D");
     jniRidePointStruct->temp = env->GetFieldID(jniRidePointStruct->cls, "temp", "D");
+    jniRidePointStruct->slope = env->GetFieldID(jniRidePointStruct->cls, "slope", "D");
     qDebug() << "Successfully created RideFilePoint";
 }
 

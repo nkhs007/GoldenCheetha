@@ -81,7 +81,7 @@ class LNP : public RideMetric {
     }
 
     void compute(RideItem *item, Specification spec, const QHash<QString,RideMetric*> &) {
-
+        qDebug() << "GOVSS.cpp : LNP : compute : L-84 : Begin of compute";
         // no ride or no samples
         if (spec.isEmpty(item->ride()) ||
             !item->isRun || item->ride()->recIntSecs() == 0) {
@@ -90,8 +90,8 @@ class LNP : public RideMetric {
             return;
         }
 
-        double weight = item->ride()->getWeight();
-        double height = item->ride()->getHeight();
+        double weight = 68.0; // item->ride()->getWeight();
+        double height = 1.78; // item->ride()->getHeight();
 
         int rollingwindowsize120 = 120 / item->ride()->recIntSecs();
         int rollingwindowsize30 = 30 / item->ride()->recIntSecs();
@@ -148,15 +148,17 @@ class LNP : public RideMetric {
                 index30 = (index30 >= rollingwindowsize30-1) ? 0 : index30+1;
             }
         }
+        qDebug() << "GOVSS.cpp : LNP : compute : L-151 : count = " << count << ", total = " << total;
         if (count) {
             lnp = pow(total/count, 0.25);
             secs = count * item->ride()->recIntSecs();
         } else {
             lnp = secs = 0;
         }
-
+        qDebug() << "GOVSS.cpp : LNP : compute : L-158 : lnp = " << lnp << ", secs = " << secs;
         setValue(lnp);
         setCount(secs);
+        qDebug() << "GOVSS.cpp : LNP : compute : L-161 : End of compute";
     }
     bool isRelevantForRide(const RideItem *ride) const { return ride->isRun; }
     MetricClass classification() const { return Undefined; }
@@ -214,8 +216,8 @@ class XPace : public RideMetric {
             return;
         }
 
-        double weight = item->ride()->getWeight();
-        double height = item->ride()->getHeight();
+        double weight = 68.0; // item->ride()->getWeight();
+        double height = 1.78; // item->ride()->getHeight();
 
         assert(deps.contains("govss_lnp"));
         LNP *lnp = dynamic_cast<LNP*>(deps.value("govss_lnp"));

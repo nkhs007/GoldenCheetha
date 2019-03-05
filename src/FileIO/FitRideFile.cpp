@@ -1446,10 +1446,9 @@ struct FitFileReaderState
                 continue;
 
             int native_num = field.num;
-            //qDebug() << "FitRideFile.cpp : decodeRecord : native_num = " << native_num;
+            //qDebug() << "FitRideFile.cpp : decodeRecord  : L-1449 : native_num = " << field.num << ", type = " << field.type << ", deve_idx = " << field.deve_idx;
 
             bool native_profile = true;
-
             if (field.deve_idx>-1) {
                 QString key = QString("%1.%2").arg(field.deve_idx).arg(field.num);
                 //qDebug() << "deve_idx" << field.deve_idx << "num" << field.num << "type" << field.type;
@@ -1491,7 +1490,7 @@ struct FitFileReaderState
             }
 
             if (native_num>-1) {
-
+                //qDebug() << "FitRideFile.cpp : 1494 --> Slope Fit native_num = " << native_num;
                 switch (native_num) {
                     case 253: // TIMESTAMP
                               time = value + qbase_time.toTime_t();
@@ -1533,6 +1532,7 @@ struct FitFileReaderState
                             break;
                     case 8: break; // packed speed/dist
                     case 9: // GRADE
+                            qDebug() << "FitRideFile.cpp : 1536 --> Slope Fit value = " << value;
                             slope = value / 100.0;
                             break;
                     case 10: //resistance = value;

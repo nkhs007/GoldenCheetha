@@ -15,6 +15,8 @@ void Java_com_svlabs_svt_matrics_SaarMatricsGenerator_analyseMatric(JNIEnv *env,
     jniConvertRidePoints(env,gen,&file);
 
     RideItem *rideItem = new RideItem(&file, NULL);
+    rideItem->isRun = file.isRun();
+    rideItem->isSwim = file.isSwim();
     QHash<QString,RideMetricPtr> notmetrics = RideMetric::computeMetrics(rideItem, Specification(),testMatrics);
     _initMatricValueStructure(env);
     //jobjectArray jniMatricValueArray = env->NewObjectArray(notmetrics.size(),jniMatricValueStruct->cls, NULL);

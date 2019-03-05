@@ -103,6 +103,10 @@ void jniConvertRidePoints(JNIEnv *env,jobject gen,RideFile *rideFile){
         point.setValue(RideFile::temp,env->GetDoubleField(jRidePoint,jtempFeild));
         //qDebug() << "jtempFeild done";
 
+        jfieldID jslopeFeild = env->GetFieldID(jRidePointClass,"slope","D");
+        point.setValue(RideFile::slope,env->GetDoubleField(jRidePoint,jslopeFeild));
+        //qDebug() << "jslopeFeild done";
+
         rideFile->appendPoint(point);
     }
 
@@ -128,6 +132,7 @@ void jniConvertRidePoints(JNIEnv *env,jobject gen,RideFile *rideFile){
     qDebug() << "matricsinterface.h : jniConvertRidePoints : Returning from the method";
 }
 void jniGetMatricsToCalculate(JNIEnv *env,jobject gen){
+    qDebug() << "matricsinterface.h : jniGetMatricsToCalculate : Begin of the method";
     jclass genrator=env->GetObjectClass(gen);
     if( genrator != NULL){
         qDebug() << "Got com.svlabs.svt.matrics.SaarMatricsGenerator Object";
@@ -151,9 +156,10 @@ void jniGetMatricsToCalculate(JNIEnv *env,jobject gen){
     for (int i=0;i<length;i++) {
         jstring string = (jstring) (env->GetObjectArrayElement(matricsToCal, i));
         const char* eachMatrics = env->GetStringUTFChars(string,0);
-        qDebug() << "Matrics got" << eachMatrics;
+        //qDebug() << "Matrics got" << eachMatrics;
         testMatrics.append(eachMatrics);
         env->ReleaseStringUTFChars(string,eachMatrics);
-        qDebug() << "After Release";
+        //qDebug() << "After Release";
     }
+    qDebug() << "matricsinterface.h : jniGetMatricsToCalculate : End of the method";
 }

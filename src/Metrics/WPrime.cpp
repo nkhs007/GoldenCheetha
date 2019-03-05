@@ -786,10 +786,11 @@ class MaxWPrime : public RideMetric {
     }
     void compute(RideItem *item, Specification, const QHash<QString,RideMetric*> &) {
 
-        if (item->ride() && item->ride()->wprimeData())
+        if (item->ride() && item->ride()->wprimeData()) {
             setValue(item->ride()->wprimeData()->maxE());
-        else
+        } else {
             setValue(0.0);
+        }
     }
 
     bool isRelevantForRide(const RideItem *ride) const { return ride->present.contains("P") || (!ride->isSwim && !ride->isRun); }

@@ -64,12 +64,12 @@ jobject Java_com_svlabs_svt_ride_SaarRideFileReader_readFile(JNIEnv * env, jobje
                 qDebug() << "Inside for looop " << eachkey;
                 const char * key = eachkey.toStdString().c_str();
                 jstring keyString = env->NewStringUTF(key);
-                qDebug() << "key got converted to char array " << key;
-                qDebug() << "key got converted to jstring " << keyString;
+                //qDebug() << "key got converted to char array " << key;
+                //qDebug() << "key got converted to jstring " << keyString;
                 const char * value = tags.value(eachkey).toStdString().c_str();
                 jstring valueString = env->NewStringUTF(value);
-                qDebug() << "value got converted to char array" << value;
-                qDebug() << "value got converted to jstring" << valueString;
+                //qDebug() << "value got converted to char array" << value;
+                //qDebug() << "value got converted to jstring" << valueString;
                 env->CallObjectMethod(hashMap, put, keyString, valueString);
                 qDebug() << "Data added to the map";
             //}
@@ -94,6 +94,7 @@ jobject Java_com_svlabs_svt_ride_SaarRideFileReader_readFile(JNIEnv * env, jobje
              env->SetDoubleField(jniRidePoint,jniRidePointStruct->watts,eachPoint->watts);
              env->SetDoubleField(jniRidePoint,jniRidePointStruct->alt,eachPoint->alt);
              env->SetDoubleField(jniRidePoint,jniRidePointStruct->temp,eachPoint->temp);
+             env->SetDoubleField(jniRidePoint,jniRidePointStruct->slope,eachPoint->slope);
              env->SetObjectArrayElement(jiniRidePointArray, i, jniRidePoint);
              //qDebug()<<"Adding :"<<i;
         }

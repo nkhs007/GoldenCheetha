@@ -69,6 +69,7 @@ class Athlete : public QObject
 
     public:
         Athlete(Context *context, const QDir &homeDir);
+        Athlete(Context *context);
         ~Athlete();
         void close();
 
@@ -113,6 +114,10 @@ class Athlete : public QObject
 
         // athlete measures
         // note ride can override if passed
+        double getAtheletWeight();
+        double getAthleteHeight();
+        void setAtheletWeight(double weight);
+        void setAthleteHeight(double height);
         double getWeight(QDate date, RideFile *ride=NULL);
         double getHeight(RideFile *ride=NULL);
 
@@ -152,6 +157,10 @@ class Athlete : public QObject
 
         // import rides from athlete specific directory
         void importFilesWhenOpeningAthlete();
+
+    private:
+        double weight_;
+        double height_;
 
     signals:
         void zonesChanged();

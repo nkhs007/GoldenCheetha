@@ -28,6 +28,7 @@
 #include "Settings.h"
 #include "Colors.h"
 #include "Units.h"
+#include <QDebug>
 
 #include <QtXml/QtXml>
 #include <algorithm> // for std::lower_bound
@@ -3153,13 +3154,15 @@ RideFile::resample(double newRecIntSecs, int /*interpolate*/)
 double 
 RideFile::getWeight()
 {
-    return context->athlete->getWeight(startTime_.date(), this);
+    //return context->athlete->getWeight(startTime_.date(), this);
+    return context->athlete->getAtheletWeight();
 }
 
 double 
 RideFile::getHeight()
 {
-    return context->athlete->getHeight(this);
+    //return context->athlete->getHeight(this);
+    return context->athlete->getAthleteHeight();
 }
 
 //

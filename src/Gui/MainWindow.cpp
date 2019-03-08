@@ -121,6 +121,12 @@
 QList<MainWindow *> mainwindows;
 extern QDesktopWidget *desktop;
 
+MainWindow::MainWindow() {
+    qDebug() << "Creating the MainWindow object";
+    Context *context = new Context(this);
+    context->athlete = new Athlete(context);
+}
+
 MainWindow::MainWindow(const QDir &home)
 {
     /*----------------------------------------------------------------------

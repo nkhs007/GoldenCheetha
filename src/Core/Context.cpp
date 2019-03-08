@@ -46,6 +46,11 @@ Context::Context(MainWindow *mainWindow): mainWindow(mainWindow)
     _contexts.append(this);
 }
 
+Context::Context(): mainWindow(NULL) {
+    qDebug() << "Context Object constructor";
+}
+
+
 Context::~Context()
 {
     int i=_contexts.indexOf(this);

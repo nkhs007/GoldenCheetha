@@ -55,6 +55,11 @@
 #include "GcUpgrade.h" // upgrade wizard
 #include "GcCrashDialog.h" // recovering from a crash?
 
+Athlete::Athlete(Context *context) {
+    this->context = context;
+    context->athlete = this;
+}
+
 Athlete::Athlete(Context *context, const QDir &homeDir)
 {
     // athlete name / structured directory
@@ -475,11 +480,22 @@ Athlete::getPDEstimates()
     return returning;
 }
 
+void Athlete::setAtheletWeight(double weight) {
+    this->weight_ = weight;
+}
+void Athlete::setAthleteHeight(double height) {
+    this->height_ = height;
+}
 
 // working with weight data
 double
-Athlete::getWeight(QDate date, RideFile *ride)
-{
+Athlete::getAtheletWeight(){
+    return this->weight_;
+}
+
+// working with weight data
+double
+Athlete::getWeight(QDate date, RideFile *ride){
     double weight;
 
     // daily weight first
@@ -497,6 +513,11 @@ Athlete::getWeight(QDate date, RideFile *ride)
     if (weight <= 0.00) weight = 80.00;
 
     return weight;
+}
+
+double
+Athlete::getAthleteHeight(){
+    return this->height_;
 }
 
 double

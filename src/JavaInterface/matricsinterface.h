@@ -16,20 +16,22 @@ typedef struct _MatricValue {
 
 _MatricValue * jniMatricValueStruct = NULL;
 
+double weight;
+double height;
+
 void _initMatricValueStructure(JNIEnv *env){
-    if(NULL == jniMatricValueStruct){
-        jniMatricValueStruct = new _MatricValue;
-        jniMatricValueStruct->cls = env->FindClass("com/svlabs/svt/ride/MatricValue");
-        if(jniMatricValueStruct->cls != NULL)
-            qDebug() <<"sucessfully created com/svlabs/svt/ride/MatricValue";
-        jniMatricValueStruct->constructortorID = env->GetMethodID(jniMatricValueStruct->cls, "<init>", "()V");
-        if(jniMatricValueStruct->constructortorID != NULL){
-            qDebug() << "sucessfully created MatricValue constructor   ";
-        }
-        jniMatricValueStruct->setKey = env->GetMethodID(jniMatricValueStruct->cls,"setKey","(Ljava/lang/String;)V");
-        jniMatricValueStruct->setValue = env->GetMethodID(jniMatricValueStruct->cls,"setValue","(D)V");
+    jniMatricValueStruct = new _MatricValue;
+    jniMatricValueStruct->cls = env->FindClass("com/svlabs/svt/ride/MatricValue");
+    if(jniMatricValueStruct->cls != NULL)
+        qDebug() <<"sucessfully created com/svlabs/svt/ride/MatricValue";
+    jniMatricValueStruct->constructortorID = env->GetMethodID(jniMatricValueStruct->cls, "<init>", "()V");
+    if(jniMatricValueStruct->constructortorID != NULL){
+        qDebug() << "sucessfully created MatricValue constructor   ";
     }
+    jniMatricValueStruct->setKey = env->GetMethodID(jniMatricValueStruct->cls,"setKey","(Ljava/lang/String;)V");
+    jniMatricValueStruct->setValue = env->GetMethodID(jniMatricValueStruct->cls,"setValue","(D)V");
 }
+
 void jniConvertRidePoints(JNIEnv *env,jobject gen,RideFile *rideFile){
 
     qDebug() << "matricsinterface.h : jniConvertRidePoints : Start converting";
@@ -129,30 +131,48 @@ void jniConvertRidePoints(JNIEnv *env,jobject gen,RideFile *rideFile){
     QString sportString = env->GetStringUTFChars(sport, 0);
     rideFile->setTag("Sport", sportString);
 
+    jmethodID getWeightMethodId = env->GetMethodID(genrator, "getWeight", "()D");
+    if( getWeightMethodId != NULL){
+        qDebug() << "Got getWeight Method";
+    }else {
+        qDebug() << "Not able to get getWeight method";
+    }
+    weight = env->CallDoubleMethod(gen, getWeightMethodId);
+
+    jmethodID getHeightMethodId = env->GetMethodID(genrator, "getHeight", "()D");
+    if( getHeightMethodId != NULL){
+        qDebug() << "Got getHeight Method";
+    }else {
+        qDebug() << "Not able to get getHeight method";
+    }
+    height = env->CallDoubleMethod(gen, getHeightMethodId);
+
     qDebug() << "matricsinterface.h : jniConvertRidePoints : Returning from the method";
 }
 void jniGetMatricsToCalculate(JNIEnv *env,jobject gen){
+    //First clear the list of matrics to calculate
+    testMatrics.clear();
     qDebug() << "matricsinterface.h : jniGetMatricsToCalculate : Begin of the method";
     jclass genrator=env->GetObjectClass(gen);
     if( genrator != NULL){
-        qDebug() << "Got com.svlabs.svt.matrics.SaarMatricsGenerator Object";
+        //qDebug() << "Got com.svlabs.svt.matrics.SaarMatricsGenerator Object";
     }else{
-         qDebug() << "Problem while gettig com.svlabs.svt.matrics.SaarMatricsGenerator Object";
+        qDebug() << "Problem while gettig com.svlabs.svt.matrics.SaarMatricsGenerator Object";
     }
     jmethodID methodId=env->GetMethodID(genrator, "getAllMatrics", "()[Ljava/lang/String;");
     if( methodId != NULL){
-        qDebug() << "Got getAllMatrics Method";
+         //qDebug() << "Got getAllMatrics Method";
     }else {
          qDebug() << "Not able to get getAllMatrics method";
     }
     jobjectArray matricsToCal = (jobjectArray)env->CallObjectMethod(gen, methodId);
     if(matricsToCal != NULL){
-        qDebug() << "Not able call the method";
+        //qDebug() << "call to getAllMatrics done";
     }else{
-        qDebug() << "call to getAllMatrics done";
+        qDebug() << "Not able call the method";
     }
     jsize length = env->GetArrayLength(matricsToCal);
-    qDebug() << "Matrics to analysis : " << length;
+    //qDebug() << "Matrics to analysis : " << length;
     for (int i=0;i<length;i++) {
         jstring string = (jstring) (env->GetObjectArrayElement(matricsToCal, i));
         const char* eachMatrics = env->GetStringUTFChars(string,0);
@@ -161,5 +181,5 @@ void jniGetMatricsToCalculate(JNIEnv *env,jobject gen){
         env->ReleaseStringUTFChars(string,eachMatrics);
         //qDebug() << "After Release";
     }
-    qDebug() << "matricsinterface.h : jniGetMatricsToCalculate : End of the method";
+    qDebug() << "matricsinterface.h : jniGetMatricsToCalculate : End of the method : testMatrics.size="<<testMatrics.size();
 }

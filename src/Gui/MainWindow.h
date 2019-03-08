@@ -81,6 +81,7 @@ class MainWindow : public QMainWindow
     public:
 
         MainWindow(const QDir &home);
+        MainWindow();
         ~MainWindow(); // temp to zap db - will move to tab //
 
         void byebye() { close(); } // go bye bye for a restart

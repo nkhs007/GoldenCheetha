@@ -90,8 +90,8 @@ class LNP : public RideMetric {
             return;
         }
 
-        double weight = 68.0; // item->ride()->getWeight();
-        double height = 1.78; // item->ride()->getHeight();
+        double weight = item->ride()->getWeight();
+        double height = item->ride()->getHeight();
 
         int rollingwindowsize120 = 120 / item->ride()->recIntSecs();
         int rollingwindowsize30 = 30 / item->ride()->recIntSecs();
@@ -148,14 +148,14 @@ class LNP : public RideMetric {
                 index30 = (index30 >= rollingwindowsize30-1) ? 0 : index30+1;
             }
         }
-        qDebug() << "GOVSS.cpp : LNP : compute : L-151 : count = " << count << ", total = " << total;
+
         if (count) {
             lnp = pow(total/count, 0.25);
             secs = count * item->ride()->recIntSecs();
         } else {
             lnp = secs = 0;
         }
-        qDebug() << "GOVSS.cpp : LNP : compute : L-158 : lnp = " << lnp << ", secs = " << secs;
+        qDebug() << "GOVSS.cpp : LNP : compute : L-158 : lnp = " << lnp << ", secs = " << secs << "count = " << count << ", total = " << total;
         setValue(lnp);
         setCount(secs);
         qDebug() << "GOVSS.cpp : LNP : compute : L-161 : End of compute";
@@ -208,16 +208,15 @@ class XPace : public RideMetric {
     }
 
     void compute(RideItem *item, Specification, const QHash<QString,RideMetric*> &deps) {
-
+        qDebug() << "GOVSS.cpp : XPace : compute : L-211 : Begin of compute";
         // no ride or no samples
         if (!item->isRun) {
             setValue(RideFile::NIL);
             setCount(0);
             return;
         }
-
-        double weight = 68.0; // item->ride()->getWeight();
-        double height = 1.78; // item->ride()->getHeight();
+        double weight = item->ride()->getWeight();
+        double height = item->ride()->getHeight();
 
         assert(deps.contains("govss_lnp"));
         LNP *lnp = dynamic_cast<LNP*>(deps.value("govss_lnp"));
@@ -377,22 +376,25 @@ class GOVSS : public RideMetric {
 
 
     void compute(RideItem *item, Specification, const QHash<QString,RideMetric*> &deps) {
-
+        qDebug() << "GOVSS.cpp : GOVSS : compute : L-380 : Begin of compute";
         // no ride or no samples
         if (!item->isRun) {
+            qDebug() << "GOVSS.cpp : GOVSS : compute : L-383 : Inside if";
             setValue(RideFile::NIL);
             setCount(0);
             return;
         }
+        qDebug() << "GOVSS.cpp : GOVSS : compute : L-388 : Outside If";
         assert(deps.contains("govss_lnp"));
         assert(deps.contains("govss_rtp"));
         assert(deps.contains("govss_iwf"));
+        qDebug() << "GOVSS.cpp : GOVSS : compute : L-391 : After assert -> deps = " << deps;
         LNP *lnp = dynamic_cast<LNP*>(deps.value("govss_lnp"));
         assert(lnp);
         RideMetric *iwf = deps.value("govss_iwf");
         assert(iwf);
         RideMetric *rtp = deps.value("govss_rtp");
-        assert(rtp);
+        assert(rtp);qDebug() << "GOVSS.cpp : GOVSS : compute : L-397 : rtp= " << rtp;
         double normWork = lnp->value(true) * lnp->count();
         double rawGOVSS = normWork * iwf->value(true);
         // No samples in manual workouts, use power at average speed and duration
@@ -407,8 +409,10 @@ class GOVSS : public RideMetric {
             rawGOVSS = watts * secs * iwf;
         }
         double workInAnHourAtRTP = rtp->value(true) * 3600;
+        qDebug() << "GOVSS.cpp : GOVSS : compute : L-412 : workInAnHourAtRTP= " << workInAnHourAtRTP;
+        qDebug() << "GOVSS.cpp : GOVSS : compute : L-413 : rawGOVSS= " << rawGOVSS;
         score = workInAnHourAtRTP ? rawGOVSS / workInAnHourAtRTP * 100.0 : 0;
-
+        qDebug() << "GOVSS.cpp : GOVSS : compute : L-415 : score= " << score;
         setValue(score);
     }
     bool isRelevantForRide(const RideItem *ride) const { return ride->isRun; }

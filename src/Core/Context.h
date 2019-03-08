@@ -74,6 +74,7 @@ class Context : public QObject
 
     public:
         Context(MainWindow *mainWindow);
+        Context();
         ~Context();
 
         // mainwindow state

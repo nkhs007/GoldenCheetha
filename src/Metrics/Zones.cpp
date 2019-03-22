@@ -518,6 +518,7 @@ next_line: {}
 // end of range
 int Zones::whichRange(const QDate &date) const
 {
+    qDebug() << "Zones.cpp : whichRange : L-521 : ranges.size = " << ranges.size();
     for (int rnum = 0; rnum < ranges.size(); ++rnum) {
 
         const ZoneRange &range = ranges[rnum];

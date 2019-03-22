@@ -74,7 +74,11 @@ class XPowerSwim : public RideMetric {
     }
 
     void compute(RideItem *item, Specification spec, const QHash<QString,RideMetric*> &) {
-
+        qDebug() << "Swimscore xpower";
+        qDebug() << "spec.isEmpty(item->ride()) : " << spec.isEmpty(item->ride()); //false
+        qDebug() << "item->isSwim : " << item->isSwim; // true
+        qDebug() << "item->ride()->recIntSecs() : " << item->ride()->recIntSecs();
+        qDebug() << "item->getWeight() : " << item->getWeight();
         // no ride or no samples
         if (spec.isEmpty(item->ride()) ||
             // xPowerSwim only makes sense for running and it needs recIntSecs > 0
@@ -88,10 +92,13 @@ class XPowerSwim : public RideMetric {
 
         static const double EPSILON = 0.1;
         static const double NEGLIGIBLE = 0.1;
-
+qDebug() << "Before creating RideFileIterator";
         double secsDelta = item->ride()->recIntSecs();
+        qDebug() << "Before creating RideFileIterator";
         double sampsPerWindow = 25.0 / secsDelta;
+        qDebug() << "Before creating RideFileIterator";
         double attenuation = sampsPerWindow / (sampsPerWindow + secsDelta);
+        qDebug() << "Before creating RideFileIterator";
         double sampleWeight = secsDelta / (sampsPerWindow + secsDelta);
 
         double lastSecs = 0.0;
@@ -99,7 +106,7 @@ class XPowerSwim : public RideMetric {
 
         double total = 0.0;
         int count = 0;
-
+        qDebug() << "Before creating RideFileIterator";
         RideFileIterator it(item->ride(), spec);
         while (it.hasNext()) {
             struct RideFilePoint *point = it.next();
@@ -317,6 +324,9 @@ class SwimScore : public RideMetric {
     void compute(RideItem *item, Specification, const QHash<QString,RideMetric*> &deps) {
 
         // xPowerSwim only makes sense for running and it needs recIntSecs > 0
+        qDebug() << "Swimscore";
+        qDebug() << "item->isSwim : " << item->isSwim;
+        qDebug() << "item->ride()->recIntSecs() : " << item->ride()->recIntSecs();
         if (!item->isSwim || item->ride()->recIntSecs() == 0) {
             setValue(RideFile::NIL);
             setCount(0);

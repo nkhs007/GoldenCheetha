@@ -51,13 +51,14 @@ bool rideCacheLessThan(const RideItem *a, const RideItem *b) { return a->dateTim
 
 RideCache::RideCache(Context *context) : context(context)
 {
+
     directory = context->athlete->home->activities();
     plannedDirectory = context->athlete->home->planned();
-
+    qDebug() << "inside RideCache constructor";
     progress_ = 100;
     exiting = false;
     estimator = new Estimator(context);
-
+    qDebug() << "inside RideCache constructor";
     // initial load of user defined metrics - do once we have an initial context
     // but before we refresh or check metrics for the first time
     if (UserMetricSchemaVersion == 0) {

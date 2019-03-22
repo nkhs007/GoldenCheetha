@@ -2052,7 +2052,7 @@ struct FitFileReaderState
     /* weather broadcast as observed at weather station (undocumented) */
     void decodeWeather(const FitDefinition &def, int time_offset,
                       const std::vector<FitValue>& values) {
-        qDebug() << "FitRideFile.cpp : decodeWeather";
+        //qDebug() << "FitRideFile.cpp : decodeWeather : L-2055";
         Q_UNUSED(time_offset);
 
         time_t time = 0;
@@ -2063,7 +2063,7 @@ struct FitFileReaderState
         int i = 0;
         foreach(const FitField &field, def.fields) {
             fit_value_t value = values[i++].v;
-
+             //qDebug() << "FitRideFile.cpp : decodeWeather : L-2066 : field.num = " << field.num;
             if( value == NA_VALUE )
                 continue;
 

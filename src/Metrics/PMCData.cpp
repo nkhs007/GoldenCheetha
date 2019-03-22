@@ -38,7 +38,7 @@ PMCData::PMCData(Context *context, Specification spec, QString metricName, int s
 {
     // get defaults if not passed
     useDefaults = false;
-
+    qDebug() << "*Inside PMC object Constructor*";
     // we're not from a datafilter
     fromDataFilter = false;
     df = NULL;
@@ -59,11 +59,13 @@ PMCData::PMCData(Context *context, Specification spec, QString metricName, int s
 
 
     refresh();
+    qDebug() << "*Inside PMC object Constructor*";
     connect(context, SIGNAL(rideAdded(RideItem*)), this, SLOT(invalidate()));
     connect(context, SIGNAL(rideDeleted(RideItem*)), this, SLOT(invalidate()));
     connect(context, SIGNAL(refreshUpdate(QDate)), this, SLOT(invalidate()));
     connect(context->athlete->rideCache, SIGNAL(itemChanged(RideItem*)), this, SLOT(invalidate()));
     connect(context->athlete->seasons, SIGNAL(seasonsChanged()), this, SLOT(invalidate()));
+    qDebug() << "*End of PMC object Constructor*";
 }
 
 PMCData::PMCData(Context *context, Specification spec, Leaf *expr, DataFilterRuntime *df, int stsDays, int ltsDays) 
@@ -205,7 +207,7 @@ void PMCData::refresh()
         // give up
         return;
     }
-    //qDebug()<<"refresh PMC dates:"<<metricName_<<"days="<<days_<<"start="<<start_<<"end="<<end_;
+    qDebug()<<"refresh PMC dates:"<<metricName_<<"days="<<days_<<"start="<<start_<<"end="<<end_;
 
     //
     // STEP TWO What are the seedings and ride values
@@ -255,16 +257,17 @@ void PMCData::refresh()
 
             // although metrics are cleansed, we check here because development
             // builds have a rideDB.json that has nan and inf values in it.
-            double value = 0;;
+            double value = 0;
             if (fromDataFilter) value = expr->eval(df, expr, 0, item).number;
             else value = item->getForSymbol(metricName_);
-
+            qDebug() << "Metric name: " << metricName_ << "value:" << value;
             if (!std::isinf(value) && !std::isnan(value)) {
                 if (item->planned)
                     planned_stress_[offset] += value;
                 else
                     stress_[offset] += value;
-                //qDebug()<<"stress_["<<offset<<"] :"<<stress_[offset];
+                qDebug()<<"stress_["<<offset<<"] :"<<stress_[offset];
+//                qDebug()<<"item->planned :"<<item->planned;
             }
         }
     }
@@ -289,6 +292,7 @@ void PMCData::refresh()
 
     double expected_rollingStress=0;
 
+    qDebug() << "LTE for lts calculation = " << lte;
     for(int day=0; day < days_; day++) {
 
         // not seeded
@@ -297,6 +301,7 @@ void PMCData::refresh()
             // LTS
             if (day) lastLTS = lts_[day-1];
             lts_[day] = (stress_[day] * (1.0 - lte)) + (lastLTS * lte);
+//            qDebug() << "lts with stress :" << stress_[day] <<" for day :" << day << " is :" << lts_[day];
 
             // STS
             if (day) lastSTS = sts_[day-1];

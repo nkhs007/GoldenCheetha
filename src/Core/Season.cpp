@@ -311,6 +311,7 @@ void EditSeasonEventDialog::nameChanged()
 void
 Seasons::readSeasons()
 {
+    qDebug() << "inside seasons constructor";
     QFile seasonFile(home.canonicalPath() + "/seasons.xml");
     QXmlInputSource source( &seasonFile );
     QXmlSimpleReader xmlReader;

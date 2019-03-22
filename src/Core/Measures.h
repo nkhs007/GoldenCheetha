@@ -76,6 +76,7 @@ public:
     // Default constructor intended to access metadata,
     // directory and withData must be provided to access data.
     Measures(QDir dir=QDir(), bool withData=false);
+    Measures(bool withData=false);
     ~Measures();
 
     QStringList getGroupSymbols() const;

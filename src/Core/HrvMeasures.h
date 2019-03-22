@@ -65,6 +65,7 @@ public:
     // Default constructor intended to access metadata,
     // directory and withData must be provided to access data.
     HrvMeasures(QDir dir=QDir(), bool withData=false);
+    HrvMeasures(bool withData=false);
     ~HrvMeasures() {}
     void write();
     QList<HrvMeasure>& hrvMeasures() { return hrvMeasures_; }

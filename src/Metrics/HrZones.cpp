@@ -426,8 +426,14 @@ bool HrZones::read(QFile &file)
 // end of range
 int HrZones::whichRange(const QDate &date) const
 {
+     qDebug() << "hrZones.cpp : whichRange : L-429 : ranges.size = " << ranges.size();
+     qDebug() << "hrZones.cpp : whichRange : L-429 : date = " << date.year() << "/" << date.month() << "/" << date.day();
     for (int rnum = 0; rnum < ranges.size(); ++rnum) {
         const HrZoneRange &range = ranges[rnum];
+        QDate d = range.begin;
+        qDebug() << "hrZones.cpp : whichRange : L-429 : date = " << d.year() << "/" << d.month() << "/" << d.day();
+        d = range.end;
+        qDebug() << "hrZones.cpp : whichRange : L-429 : date = " << d.year() << "/" << d.month() << "/" << d.day();
         if (((date >= range.begin) || (range.begin.isNull())) &&
             ((date < range.end) || (range.end.isNull())))
             return rnum;

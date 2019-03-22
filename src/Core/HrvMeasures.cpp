@@ -166,6 +166,10 @@ HrvMeasures::HrvMeasures(QDir dir, bool withData) : dir(dir), withData(withData)
     }
 }
 
+HrvMeasures::HrvMeasures(bool withData) : dir(*new QDir()), withData(withData) {
+
+}
+
 void
 HrvMeasures::write() {
     // Nothing to do if data not loaded

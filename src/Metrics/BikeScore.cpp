@@ -58,9 +58,10 @@ class XPower : public RideMetric {
     }
 
     void compute(RideItem *item, Specification spec, const QHash<QString,RideMetric*> &) {
-
+        qDebug() << "inside bike score";
         // no ride or no samples
         if (spec.isEmpty(item->ride()) || item->ride()->recIntSecs()==0) {
+            qDebug() << " bike Score recIntSec is : " << item->ride()->recIntSecs();
             setValue(RideFile::NIL);
             setCount(0);
             return;
@@ -405,13 +406,17 @@ class BikeScore : public RideMetric {
     }
 
     void compute(RideItem *item, Specification, const QHash<QString,RideMetric*> &deps) {
-
+        qDebug() << "BikeScore.cpp : compute-408 : Method start";
+        qDebug() << "BikeScore.cpp : compute-408 : item->isRun = " << item->isRun;
+        qDebug() << "BikeScore.cpp : compute-408 : item->context->athlete->zones(item->isRun)" << (item->context->athlete->zones(item->isRun)==NULL);
+        qDebug() << "BikeScore.cpp : compute-408 : item->zoneRange = " << item->zoneRange;
         // no zones
         if (item->context->athlete->zones(item->isRun)==NULL || item->zoneRange < 0) {
             setValue(RideFile::NIL);
             setCount(0);
             return;
         }
+        qDebug() << "BikeScore.cpp : compute-408 : After If";
 
         assert(deps.contains("skiba_xpower"));
         assert(deps.contains("skiba_relative_intensity"));
@@ -425,6 +430,7 @@ class BikeScore : public RideMetric {
         score = rawBikeScore / workInAnHourAtCP * 100.0;
 
         setValue(score);
+        qDebug() << "BikeScore.cpp : compute-428 : Method end";
     }
 
     bool isRelevantForRide(const RideItem*ride) const { return (!ride->isRun && !ride->isSwim); }

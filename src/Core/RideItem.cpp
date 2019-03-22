@@ -679,10 +679,11 @@ RideItem::refresh()
 double
 RideItem::getWeight(int type)
 {
+    qDebug() << "Weight in RideItem-" << weight;
     // get any body measurements first
     BodyMeasures* pBodyMeasures = dynamic_cast <BodyMeasures*>(context->athlete->measures->getGroup(Measures::Body));
     pBodyMeasures->getBodyMeasure(dateTime.date(), weightData);
-
+    qDebug() << "Weight in RideItem type-" << type << "BodyMeasure::WeightKg" << BodyMeasure::WeightKg;
     // return what was asked for!
     switch(type) {
 
@@ -712,6 +713,7 @@ RideItem::getWeight(int type)
     case BodyMeasure::FatPercent : return weightData.fatpercent;
 
     }
+    qDebug() << "Weight in RideItem-" << weight;
     return weight;
 }
 
@@ -739,11 +741,15 @@ RideItem::getForSymbol(QString name, bool useMetricUnits)
     if (metrics_.size() && metrics_.size() == factory.metricCount()) {
         // return the precomputed metric value
         const RideMetric *m = factory.rideMetric(name);
+        qDebug() << "metric name = " << name;
+        qDebug() << "useMetricUnits = " << useMetricUnits;
+        qDebug() << "metric value = " << metrics_[m->index()];
         if (m) {
             if (useMetricUnits) return metrics_[m->index()];
             else {
                 // little hack to set/get for conversion
                 const_cast<RideMetric*>(m)->setValue(metrics_[m->index()]);
+                qDebug() << "got metric name from RideItem " << name;
                 return m->value(useMetricUnits);
             }
         }

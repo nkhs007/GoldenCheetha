@@ -160,6 +160,14 @@ BodyMeasures::BodyMeasures(QDir dir, bool withData) : dir(dir), withData(withDat
     }
 }
 
+BodyMeasures::BodyMeasures(bool withData) : dir(*new QDir()), withData(withData) {
+
+}
+
+//BodyMeasures::BodyMeasures() {
+
+//}
+
 void
 BodyMeasures::write() {
     // Nothing to do if data not loaded

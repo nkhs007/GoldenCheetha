@@ -166,7 +166,7 @@ DataFilter::builtins()
         } else if (i == 41) {
             returning << "XDATA_UNITS(\"xdata\", \"series\")";
         } else if (i == 42) {
-            Measures measures = Measures();
+            Measures measures = Measures(false);
             QStringList groupSymbols = measures.getGroupSymbols();
             for (int g=0; g<groupSymbols.count(); g++)
                 foreach (QString fieldSymbol, measures.getFieldSymbols(g))

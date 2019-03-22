@@ -50,6 +50,7 @@ class RideCache : public QObject
     public:
 
         RideCache(Context *context);
+        RideCache() {}
         ~RideCache();
 
         // table models

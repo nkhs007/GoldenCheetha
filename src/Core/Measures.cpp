@@ -56,6 +56,13 @@ Measures::Measures(QDir dir, bool withData) : dir(dir), withData(withData) {
     groups.append(new HrvMeasures(dir, withData));
 }
 
+Measures::Measures(bool withData) : withData(withData) {
+    // load in MeasuresGroupType order!
+    dir = *new QDir();
+    groups.append(new BodyMeasures(withData));
+    groups.append(new HrvMeasures(withData));
+}
+
 Measures::~Measures() {
     foreach (MeasuresGroup* measuresGroup, groups)
         delete measuresGroup;

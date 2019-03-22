@@ -264,6 +264,7 @@ public:
 
     UserMetric(Context *context, UserMetricSettings settings);
     UserMetric(const UserMetric *from);
+    UserMetric() {}
     ~UserMetric();
 
     // is this a user defined one?

@@ -55,9 +55,31 @@
 #include "GcUpgrade.h" // upgrade wizard
 #include "GcCrashDialog.h" // recovering from a crash?
 
-Athlete::Athlete(Context *context) {
+Athlete::Athlete(Context *context, Zones *zones[2], HrZones *hrzones[2], PaceZones *pacezones[2]) {
+    qDebug() << "Athlete constructor start";
     this->context = context;
     context->athlete = this;
+
+    zones_[0] = zones[0];
+    zones_[1] = zones[1];
+
+    hrzones_[0] = hrzones[0];
+    hrzones_[1] = hrzones[1];
+
+    pacezones_[0] = pacezones[0];
+    pacezones_[1] = pacezones[1];
+
+    measures = new Measures(false);
+    rideCache = new RideCache();
+    context->specialFields = SpecialFields();
+    seasons = new Seasons();
+    qDebug() << "Athlete constructor end";
+}
+
+void
+Athlete::setZones(Zones *bikeZone, Zones *runZone) {
+    zones_[0] = bikeZone;
+    zones_[1] = runZone;
 }
 
 Athlete::Athlete(Context *context, const QDir &homeDir)
@@ -481,9 +503,15 @@ Athlete::getPDEstimates()
 }
 
 void Athlete::setAtheletWeight(double weight) {
+    if( weight <= 0) {
+        weight = 80.0;// No weight default is weird, we'll set to 80kg
+    }
     this->weight_ = weight;
 }
 void Athlete::setAthleteHeight(double height) {
+    if( height <= 0) {
+        height = 1.7526;// No weight default is weird, we'll set to 80kg
+    }
     this->height_ = height;
 }
 
@@ -545,6 +573,7 @@ PMCData *
 Athlete::getPMCFor(QString metricName, int stsdays, int ltsdays)
 {
     PMCData *returning = NULL;
+     qDebug() << "*Inside Athlete::getPMCFor*";
 
     // if we don't already have one, create it
     returning = pmcData.value(metricName, NULL);
@@ -556,7 +585,7 @@ Athlete::getPMCFor(QString metricName, int stsdays, int ltsdays)
         // add to our collection
         pmcData.insert(metricName, returning);
     }
-
+    qDebug() << "*End of Athlete::getPMCFor*";
     return returning;
 }
 

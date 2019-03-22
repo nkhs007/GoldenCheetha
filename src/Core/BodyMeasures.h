@@ -63,6 +63,7 @@ public:
     // Default constructor intended to access metadata,
     // directory and withData must be provided to access data.
     BodyMeasures(QDir dir=QDir(), bool withData=false);
+    BodyMeasures(bool withData=false);
     ~BodyMeasures() {}
     void write();
     QList<BodyMeasure>& bodyMeasures() { return bodyMeasures_; }

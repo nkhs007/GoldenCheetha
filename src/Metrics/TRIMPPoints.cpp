@@ -62,6 +62,9 @@ class TRIMPPoints : public RideMetric {
 
         if (!item->context->athlete->hrZones(item->isRun) || item->hrZoneRange < 0) {
             setValue(RideFile::NIL);
+             qDebug() << "trimp_points nill";
+             qDebug() << "item->context->athlete->hrZones(item->isRun) : " << item->context->athlete->hrZones(item->isRun);
+             qDebug() << "trimp_points hr isRun : "<< item->isRun<< " " << item->hrZoneRange;
             return;
         }
 
@@ -70,6 +73,8 @@ class TRIMPPoints : public RideMetric {
         double maxHr = item->context->athlete->hrZones(item->isRun)->getMaxHr(item->hrZoneRange);
         double restHr = item->context->athlete->hrZones(item->isRun)->getRestHr(item->hrZoneRange);
         restHr = item->getText("Rest HR", QString("%1").arg(restHr)).toDouble();
+        qDebug() << "trimp_points - " << "maxHR : " << maxHr;
+        qDebug() << "trimp_points - " << "restHr : " << restHr;
 
         assert(deps.contains("time_riding"));
         assert(deps.contains("workout_time"));

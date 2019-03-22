@@ -159,6 +159,7 @@ class RideItem : public QObject
         RideFile *ride(bool open=true);
         RideFileCache *fileCache();
         QVector<double> &metrics() { return metrics_; }
+        void setMmetrics(QVector<double> metrics) { metrics_ = metrics; }
         QVector<double> &counts() { return count_; }
         QMap <int, double>&stdmeans() { return stdmean_; }
         QMap <int, double>&stdvariances() { return stdvariance_; }

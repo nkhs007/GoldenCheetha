@@ -86,11 +86,11 @@ class Athlete : public QObject
 
         // zones
         const Zones *zones(bool isRun) const {
-            qDebug() << "Athlete.h : zones : L-89 : zones_=" << zones_;
+//            qDebug() << "Athlete.h : zones : L-89 : zones_=" << zones_;
             return zones_[isRun];
         }
         const HrZones *hrZones(bool isRun) const {
-             qDebug() << "trimp_points hr isRun : " << hrzones_[isRun];
+//             qDebug() << "trimp_points hr isRun : " << hrzones_[isRun];
             return hrzones_[isRun];
         }
         const PaceZones *paceZones(bool isSwim) const { return pacezones_[isSwim]; }

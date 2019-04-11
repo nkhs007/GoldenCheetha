@@ -17,8 +17,8 @@ include(gcconfig.pri)
 
 # You can also define your own local source to add to build
 HEADERS += $${LOCALHEADERS}
-
-SOURCES += $${LOCALSOURCES}
+SOURCES += $${LOCALSOURCES} \
+    JavaInterface/AverageMetricInterface.cpp
 
 ###=====================
 ### GOLDENCHEETAH TARGET
@@ -660,10 +660,17 @@ HEADERS += ../Headers/jni.h \
            JavaInterface/ridesinterface.h \
            JavaInterface/matricsinterface.h \
            JavaInterface/com_svlabs_svt_ride_SaarRideFileReader.h \
-           JavaInterface/com_svlabs_svt_matrics_SaarMatricsGenerator.h
+           JavaInterface/com_svlabs_svt_matrics_SaarMatricsGenerator.h \
+           JavaInterface/com_svlabs_svt_matrics_SaarMetricAverageGenerator.h \
+           JavaInterface/AverageMetricInterface.h \
+           JavaInterface/com_svlabs_svt_matrics_SaarPmcGraph.h
+
+
 
 SOURCES +=  JavaInterface/com_svlabs_svt_ride_SaarRideFileReader.cpp \
-            JavaInterface/com_svlabs_svt_matrics_SaarMatricsGenerator.cpp
+            JavaInterface/com_svlabs_svt_matrics_SaarMatricsGenerator.cpp \
+            JavaInterface/com_svlabs_svt_matrics_SaarMetricAverageGenerator.cpp \
+            JavaInterface/com_svlabs_svt_matrics_SaarPmcGraph.cpp
 ###=========================================
 ### HEADER FILES [scanned by qmake, for moc]
 ###=========================================

@@ -221,12 +221,12 @@ RideMetric::computeMetrics(RideItem *item, Specification spec, const QStringList
 
         // does this one have any dependencies?
         const QVector<QString> &deps = factory.dependencies(symbol);
-        qDebug() << "symbol : " << symbol;
+//        qDebug() << "symbol : " << symbol;
         bool ready = true;
 
         // if the dependencies aren't done yet add to the end of the list
         foreach (QString dep, deps) {
-            qDebug() << "dep : " << dep;
+//            qDebug() << "dep : " << dep;
             if (!done.contains(dep)) {
                 ready = false;
                 if (!builtin.contains(dep))

@@ -73,8 +73,8 @@ class TRIMPPoints : public RideMetric {
         double maxHr = item->context->athlete->hrZones(item->isRun)->getMaxHr(item->hrZoneRange);
         double restHr = item->context->athlete->hrZones(item->isRun)->getRestHr(item->hrZoneRange);
         restHr = item->getText("Rest HR", QString("%1").arg(restHr)).toDouble();
-        qDebug() << "trimp_points - " << "maxHR : " << maxHr;
-        qDebug() << "trimp_points - " << "restHr : " << restHr;
+//        qDebug() << "trimp_points - " << "maxHR : " << maxHr;
+//        qDebug() << "trimp_points - " << "restHr : " << restHr;
 
         assert(deps.contains("time_riding"));
         assert(deps.contains("workout_time"));

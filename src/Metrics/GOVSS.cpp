@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2010 Mark Liversedge (liversedge@gmail.com)
  *               2014 Alejandro Martinez (amtriathlon@gmail.com)
  *
@@ -30,7 +30,7 @@
 #include <algorithm>
 #include <QApplication>
 
-// NOTE: This code follows the description of LNP, IWF and GOVSS in 
+// NOTE: This code follows the description of LNP, IWF and GOVSS in
 // "Calculation of Power Output and Quantification of Training Stress in
 // Distance Runners: The Development of the GOVSS Algorithm", by Phil Skiba:
 // http://www.physfarm.com/govss.pdf
@@ -81,7 +81,7 @@ class LNP : public RideMetric {
     }
 
     void compute(RideItem *item, Specification spec, const QHash<QString,RideMetric*> &) {
-        qDebug() << "GOVSS.cpp : LNP : compute : L-84 : Begin of compute";
+        //qDebug() << "GOVSS.cpp : LNP : compute : L-84 : Begin of compute";
         // no ride or no samples
         if (spec.isEmpty(item->ride()) ||
             !item->isRun || item->ride()->recIntSecs() == 0) {
@@ -119,7 +119,7 @@ class LNP : public RideMetric {
             RideFileIterator it(item->ride(), spec);
             while (it.hasNext()) {
                 struct RideFilePoint *point = it.next();
-
+//                qDebug() << index120 << "rideFile kph " << point->kph;
                 double speed = point->kph/3.6;
                 sumSpeed += speed;
                 sumSpeed -= rollingSpeed[index120];
@@ -149,16 +149,18 @@ class LNP : public RideMetric {
             }
         }
 
+        qDebug() << "govss_lnp " << "count " << count << "total " << total;
+
         if (count) {
             lnp = pow(total/count, 0.25);
             secs = count * item->ride()->recIntSecs();
         } else {
             lnp = secs = 0;
         }
-        qDebug() << "GOVSS.cpp : LNP : compute : L-158 : lnp = " << lnp << ", secs = " << secs << "count = " << count << ", total = " << total;
+        //qDebug() << "GOVSS.cpp : LNP : compute : L-158 : lnp = " << lnp << ", secs = " << secs << "count = " << count << ", total = " << total;
         setValue(lnp);
         setCount(secs);
-        qDebug() << "GOVSS.cpp : LNP : compute : L-161 : End of compute";
+        //qDebug() << "GOVSS.cpp : LNP : compute : L-161 : End of compute";
     }
     bool isRelevantForRide(const RideItem *ride) const { return ride->isRun; }
     MetricClass classification() const { return Undefined; }
@@ -208,7 +210,7 @@ class XPace : public RideMetric {
     }
 
     void compute(RideItem *item, Specification, const QHash<QString,RideMetric*> &deps) {
-        qDebug() << "GOVSS.cpp : XPace : compute : L-211 : Begin of compute";
+        //qDebug() << "GOVSS.cpp : XPace : compute : L-211 : Begin of compute";
         // no ride or no samples
         if (!item->isRun) {
             setValue(RideFile::NIL);
@@ -282,7 +284,7 @@ class RTP : public RideMetric {
 
         double weight = item->ride()->getWeight();
         double height = item->ride()->getHeight();
-        
+
         const PaceZones *zones = item->context->athlete->paceZones(false);
         int zoneRange = item->paceZoneRange;
 
@@ -291,11 +293,12 @@ class RTP : public RideMetric {
 
         // not overriden so use the set value
         // if it has been set at all
-        if (!cv && zones && zoneRange >= 0) 
+        if (!cv && zones && zoneRange >= 0)
             cv = zones->getCV(zoneRange);
-        
+
         // Running power at cv constant speed on flat surface
         double watts = running_power(weight, height, cv/3.6);
+        qDebug() << "***** weight " << weight << "height " << height << "cv" << cv;
 
         setValue(watts);
     }
@@ -376,25 +379,26 @@ class GOVSS : public RideMetric {
 
 
     void compute(RideItem *item, Specification, const QHash<QString,RideMetric*> &deps) {
-        qDebug() << "GOVSS.cpp : GOVSS : compute : L-380 : Begin of compute";
+        //qDebug() << "GOVSS.cpp : GOVSS : compute : L-380 : Begin of compute";
         // no ride or no samples
         if (!item->isRun) {
-            qDebug() << "GOVSS.cpp : GOVSS : compute : L-383 : Inside if";
+           // qDebug() << "GOVSS.cpp : GOVSS : compute : L-383 : Inside if";
             setValue(RideFile::NIL);
             setCount(0);
             return;
         }
-        qDebug() << "GOVSS.cpp : GOVSS : compute : L-388 : Outside If";
+        //qDebug() << "GOVSS.cpp : GOVSS : compute : L-388 : Outside If";
         assert(deps.contains("govss_lnp"));
         assert(deps.contains("govss_rtp"));
         assert(deps.contains("govss_iwf"));
-        qDebug() << "GOVSS.cpp : GOVSS : compute : L-391 : After assert -> deps = " << deps;
+        //qDebug() << "GOVSS.cpp : GOVSS : compute : L-391 : After assert -> deps = " << deps;
         LNP *lnp = dynamic_cast<LNP*>(deps.value("govss_lnp"));
         assert(lnp);
         RideMetric *iwf = deps.value("govss_iwf");
         assert(iwf);
         RideMetric *rtp = deps.value("govss_rtp");
-        assert(rtp);qDebug() << "GOVSS.cpp : GOVSS : compute : L-397 : rtp= " << rtp;
+        assert(rtp);
+        //qDebug() << "GOVSS.cpp : GOVSS : compute : L-397 : rtp= " << rtp;
         double normWork = lnp->value(true) * lnp->count();
         double rawGOVSS = normWork * iwf->value(true);
         // No samples in manual workouts, use power at average speed and duration

@@ -26,6 +26,7 @@ _MatricValue * jniMatricValueStruct = NULL;
 
 double weight;
 double height;
+bool isMetricUnit;
 
 void _initMatricValueStructure(JNIEnv *env){
     jniMatricValueStruct = new _MatricValue;
@@ -37,7 +38,7 @@ void _initMatricValueStructure(JNIEnv *env){
         qDebug() << "sucessfully created MatricValue constructor   ";
     }
     jniMatricValueStruct->setKey = env->GetMethodID(jniMatricValueStruct->cls,"setKey","(Ljava/lang/String;)V");
-    jniMatricValueStruct->setValue = env->GetMethodID(jniMatricValueStruct->cls,"setValue","(D)V");
+    jniMatricValueStruct->setValue = env->GetMethodID(jniMatricValueStruct->cls,"setValue","(Ljava/lang/String;)V");
 }
 
 void jniConvertRidePoints(JNIEnv *env,jobject gen,RideFile *rideFile){
@@ -155,6 +156,14 @@ void jniConvertRidePoints(JNIEnv *env,jobject gen,RideFile *rideFile){
         qDebug() << "Not able to get getHeight method";
     }
     height = env->CallDoubleMethod(gen, getHeightMethodId);
+
+    jmethodID getMetricMethodId = env->GetMethodID(genrator, "isMetric", "()Z");
+    if( getMetricMethodId != nullptr){
+        qDebug() << "Got isMetric Method";
+    }else {
+        qDebug() << "Not able to get isMetric method";
+    }
+    isMetricUnit = env->CallBooleanMethod(gen, getMetricMethodId);
 
      jmethodID getDateMethodId = env->GetMethodID(genrator, "getDate", "()J");
      if (!getDateMethodId) {
@@ -323,7 +332,7 @@ void jniConvertPaceZone(JNIEnv *env,jobject gen, PaceZones *pacezones[2]){
     // Pace Zones for Run & Swim
     for (int i=0; i < 2; i++) {
         pacezones[i] = new PaceZones(i>0);
-        int paceNum = pacezones[i]->addZoneRange(*new QDate(1900,1,1), (int)env->CallDoubleMethod(jPaceZone, getThresholdMethodId));
+        int paceNum = pacezones[i]->addZoneRange(*new QDate(1900,1,1), env->CallDoubleMethod(jPaceZone, getThresholdMethodId));
         QList<PaceZoneInfo> paceZoneInfo = QList<PaceZoneInfo>();
         jsize length = env->GetArrayLength(jZones);
         qDebug() << "Pace zone length : " << length;
@@ -337,7 +346,7 @@ void jniConvertPaceZone(JNIEnv *env,jobject gen, PaceZones *pacezones[2]){
 
            jstring jName = (jstring) env->CallObjectMethod(jZoneValue, jNameMethodId);
            QString name = env->GetStringUTFChars(jName, 0);
-            paceZoneInfo.append(*new PaceZoneInfo(name, name, env->CallDoubleMethod(jZoneValue, jMinValueMethodId),env->CallDoubleMethod(jZoneValue, jMaxValueMethodId)));
+            paceZoneInfo.append(*new PaceZoneInfo("Z" + i, name, env->CallDoubleMethod(jZoneValue, jMinValueMethodId),env->CallDoubleMethod(jZoneValue, jMaxValueMethodId)));
         }
 
 
@@ -377,6 +386,8 @@ void calculateMetrics(JNIEnv *env,Context *context, jobject gen,RideItem *rideIt
     qDebug() << "*****RR-" << rr << "*****";
     qDebug() << "*****SB-" << sb << "*****";
 
+//    std:String charctl = "" + lts
+
     jmethodID getAllMatricsMethodId=env->GetMethodID(env->GetObjectClass(gen), "getAllMatrics", "()[Ljava/lang/String;");
 
     jobjectArray matricsToCal = (jobjectArray)env->CallObjectMethod(gen, getAllMatricsMethodId);
@@ -390,27 +401,27 @@ void calculateMetrics(JNIEnv *env,Context *context, jobject gen,RideItem *rideIt
         if (strncmp(nativeString,"CTL",3) == 0) {
             jobject jniLTSValue = env->NewObject(jniMatricValueStruct->cls, jniMatricValueStruct->constructortorID);
             env->CallObjectMethod(jniLTSValue,jniMatricValueStruct->setKey, env->NewStringUTF("CTL"));
-            env->CallObjectMethod(jniLTSValue,jniMatricValueStruct->setValue, lts);
+            env->CallObjectMethod(jniLTSValue,jniMatricValueStruct->setValue, env->NewStringUTF(std::to_string(lts).data()));
             env->CallObjectMethod(gen, jniAddRidePointMethod, jniLTSValue);
         }
         if (strncmp(nativeString,"ATL",3) == 0) {
             jobject jniSTSValue = env->NewObject(jniMatricValueStruct->cls, jniMatricValueStruct->constructortorID);
             env->CallObjectMethod(jniSTSValue,jniMatricValueStruct->setKey, env->NewStringUTF("ATL"));
-            env->CallObjectMethod(jniSTSValue,jniMatricValueStruct->setValue, sts);
+            env->CallObjectMethod(jniSTSValue,jniMatricValueStruct->setValue, env->NewStringUTF(std::to_string(sts).data()));
             env->CallObjectMethod(gen, jniAddRidePointMethod, jniSTSValue);
 
         }
         if (strncmp(nativeString,"TSB",3) == 0) {
             jobject jniSBValue = env->NewObject(jniMatricValueStruct->cls, jniMatricValueStruct->constructortorID);
             env->CallObjectMethod(jniSBValue,jniMatricValueStruct->setKey, env->NewStringUTF("TSB"));
-            env->CallObjectMethod(jniSBValue,jniMatricValueStruct->setValue, sb);
+            env->CallObjectMethod(jniSBValue,jniMatricValueStruct->setValue, env->NewStringUTF(std::to_string(sb).data()));
             env->CallObjectMethod(gen, jniAddRidePointMethod, jniSBValue);
 
         }
         if (strncmp(nativeString,"RR",3) == 0) {
             jobject jniRRValue = env->NewObject(jniMatricValueStruct->cls, jniMatricValueStruct->constructortorID);
             env->CallObjectMethod(jniRRValue,jniMatricValueStruct->setKey, env->NewStringUTF("RR"));
-            env->CallObjectMethod(jniRRValue,jniMatricValueStruct->setValue, rr);
+            env->CallObjectMethod(jniRRValue,jniMatricValueStruct->setValue, env->NewStringUTF(std::to_string(rr).data()));
             env->CallObjectMethod(gen, jniAddRidePointMethod, jniRRValue);
         }
     }

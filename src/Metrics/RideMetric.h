@@ -390,8 +390,10 @@ private:
     QHash<QString,RideMetric*> metricHash() const { return metrics; }
 
     void initialize() {
-        foreach(const QString &metricName, metrics.keys())
+        foreach(const QString &metricName, metrics.keys()){
+//            qDebug() << "metric name " << metricName;
             metrics[metricName]->initialize();
+        }
     }
 
     const QStringList &allMetrics() const { return metricNames; }

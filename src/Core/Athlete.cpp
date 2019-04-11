@@ -573,7 +573,7 @@ PMCData *
 Athlete::getPMCFor(QString metricName, int stsdays, int ltsdays)
 {
     PMCData *returning = NULL;
-     qDebug() << "*Inside Athlete::getPMCFor*";
+//     qDebug() << "*Inside Athlete::getPMCFor*";
 
     // if we don't already have one, create it
     returning = pmcData.value(metricName, NULL);
@@ -585,7 +585,7 @@ Athlete::getPMCFor(QString metricName, int stsdays, int ltsdays)
         // add to our collection
         pmcData.insert(metricName, returning);
     }
-    qDebug() << "*End of Athlete::getPMCFor*";
+//    qDebug() << "*End of Athlete::getPMCFor*";
     return returning;
 }
 

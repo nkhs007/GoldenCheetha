@@ -74,11 +74,11 @@ class XPowerSwim : public RideMetric {
     }
 
     void compute(RideItem *item, Specification spec, const QHash<QString,RideMetric*> &) {
-        qDebug() << "Swimscore xpower";
-        qDebug() << "spec.isEmpty(item->ride()) : " << spec.isEmpty(item->ride()); //false
-        qDebug() << "item->isSwim : " << item->isSwim; // true
-        qDebug() << "item->ride()->recIntSecs() : " << item->ride()->recIntSecs();
-        qDebug() << "item->getWeight() : " << item->getWeight();
+//        qDebug() << "Swimscore xpower";
+//        qDebug() << "spec.isEmpty(item->ride()) : " << spec.isEmpty(item->ride()); //false
+//        qDebug() << "item->isSwim : " << item->isSwim; // true
+//        qDebug() << "item->ride()->recIntSecs() : " << item->ride()->recIntSecs();
+//        qDebug() << "item->getWeight() : " << item->getWeight();
         // no ride or no samples
         if (spec.isEmpty(item->ride()) ||
             // xPowerSwim only makes sense for running and it needs recIntSecs > 0

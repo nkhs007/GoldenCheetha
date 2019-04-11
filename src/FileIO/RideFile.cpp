@@ -1354,6 +1354,7 @@ void RideFile::appendPoint(double secs, double cad, double hr, double km,
                            double rvert, double rcad, double rcontact, double tcore,
                            int interval)
 {
+//    qDebug() << "Inside appendPoint(double ..)";
     appendOrUpdatePoint(secs,cad,hr,km,kph,
                 nm,watts,alt,lon,lat,
                 headwind, slope,
@@ -1381,6 +1382,9 @@ void RideFile::appendOrUpdatePoint(double secs, double cad, double hr, double km
 {
     // negative values are not good, make them zero
     // although alt, lat, lon, headwind, slope and temperature can be negative of course!
+
+
+
 #ifdef Q_CC_MSVC
     if (!_finite(secs) || secs<0) secs=0;
     if (!_finite(cad) || cad<0) cad=0;
@@ -1437,6 +1441,11 @@ void RideFile::appendOrUpdatePoint(double secs, double cad, double hr, double km
     if (!std::isfinite(tcore) || tcore<0) tcore=0;
 #endif
 
+//    qDebug() << "RideFile.cpp 1444";
+
+//    qDebug() << "dataPoints_" << dataPoints_;
+
+
     // if bad time or distance ignore it if NOT the first sample
     if (dataPoints_.count() != 0 && secs == 0.00f && km == 0.00f) return;
 
@@ -1444,6 +1453,8 @@ void RideFile::appendOrUpdatePoint(double secs, double cad, double hr, double km
     //                                 setting an absolute max. At least We know the highest
     //                                 point on Earth (Mt Everest).
     if (alt > RideFile::maximumFor(RideFile::alt)) alt = RideFile::maximumFor(RideFile::alt);
+
+
 
     RideFilePoint* point = new RideFilePoint(secs, cad, hr, km, kph, nm, watts, alt, lon, lat,
                                              headwind, slope, temp,
@@ -1471,6 +1482,8 @@ void RideFile::appendOrUpdatePoint(double secs, double cad, double hr, double km
         } else
            forceAppend = true;
     }
+
+//    qDebug() << "Inside appendOrUpdatePoint(point)";
 
     if (forceAppend) {
         RideFilePoint* point = new RideFilePoint(secs, cad, hr, km, kph, nm, watts, alt, lon, lat,
@@ -1530,6 +1543,9 @@ void RideFile::appendOrUpdatePoint(double secs, double cad, double hr, double km
 
 void RideFile::appendPoint(const RideFilePoint &point)
 {
+
+//    qDebug() << "Inside appendPoint(point)";
+
     appendPoint(point.secs,point.cad,point.hr,point.km,point.kph,
                 point.nm,point.watts,point.alt,point.lon,point.lat,
                 point.headwind, point.slope,
@@ -3154,14 +3170,14 @@ RideFile::resample(double newRecIntSecs, int /*interpolate*/)
 double 
 RideFile::getWeight()
 {
-    //return context->athlete->getWeight(startTime_.date(), this);
+//    return context->athlete->getWeight(startTime_.date(), this);
     return context->athlete->getAtheletWeight();
 }
 
 double 
 RideFile::getHeight()
 {
-    //return context->athlete->getHeight(this);
+//    return context->athlete->getHeight(this);
     return context->athlete->getAthleteHeight();
 }
 

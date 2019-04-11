@@ -62,7 +62,7 @@ class AerobicDecoupling : public RideMetric {
     }
 
     void compute(RideItem *item, Specification spec, const QHash<QString,RideMetric*> &){
-
+//        qDebug() << "" << added;
         // how many samples .. to find half way
         RideFileIterator it(item->ride(), spec);
         int start = it.firstIndex();

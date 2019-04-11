@@ -530,7 +530,10 @@ RideCache::getAggregate(QString name, Specification spec, bool useMetricUnits, b
 
     // what we will return
     double rvalue = 0;
+
     double rcount = 0; // using double to avoid rounding issues with int when dividing
+
+//    qDebug() << name << "type : " << metric->type();
 
     // loop through and aggregate
     foreach (RideItem *item, rides()) {

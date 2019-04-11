@@ -16,8 +16,6 @@ void Java_com_svlabs_svt_matrics_SaarMatricsGenerator_analyseMatric(JNIEnv *env,
     RideFile file;
 
     jniConvertRidePoints(env,gen,&file);
-//    jniGetAthleteData(env,gen,&file);
-
     Zones *zones[2];
     HrZones *hrzones[2];
     PaceZones *pacezones[2];
@@ -34,6 +32,9 @@ void Java_com_svlabs_svt_matrics_SaarMatricsGenerator_analyseMatric(JNIEnv *env,
     Athlete *athlete = new Athlete(context, zones, hrzones, pacezones);
     athlete->setAtheletWeight(weight);
     athlete->setAthleteHeight(height);
+    athlete->useMetricUnits = isMetricUnit;
+
+    file.context = context;
 
     RideItem *rideItem = new RideItem(&file, context);
 
@@ -68,9 +69,18 @@ void Java_com_svlabs_svt_matrics_SaarMatricsGenerator_analyseMatric(JNIEnv *env,
             qDebug() << "Not able to create jni matric value" << "Key : " << key << ", RideMatValue : " << rideMatPtr->value();
         }
         env->CallObjectMethod(jniMatricValue,jniMatricValueStruct->setKey, env->NewStringUTF(key.toUtf8().constData()));
-        env->CallObjectMethod(jniMatricValue,jniMatricValueStruct->setValue, rideMatPtr->value());
+        env->CallObjectMethod(jniMatricValue,jniMatricValueStruct->setValue, env->NewStringUTF(std::to_string(rideMatPtr->value()).data()));
         jmethodID jniAddRidePointMethod = env->GetMethodID(env->GetObjectClass(gen),"addMatricValue","(Lcom/svlabs/svt/ride/MatricValue;)V");
         env->CallObjectMethod(gen, jniAddRidePointMethod, jniMatricValue);
     }
     qDebug() << "Returing from Java_com_svlabs_svt_matrics_SaarMatricsGenerator_analyseMatric";
+
+    qApplication->exit(0);
+    qApplication->quit();
+    qDebug() << "qApplication->exit(0)";
+    delete context;
+    qDebug() << "context dereference";
+    delete firstarg;
+    delete jniMatricValueStruct;
+    free(athlete);
 }

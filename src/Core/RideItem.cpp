@@ -741,9 +741,9 @@ RideItem::getForSymbol(QString name, bool useMetricUnits)
     if (metrics_.size() && metrics_.size() == factory.metricCount()) {
         // return the precomputed metric value
         const RideMetric *m = factory.rideMetric(name);
-        qDebug() << "metric name = " << name;
-        qDebug() << "useMetricUnits = " << useMetricUnits;
-        qDebug() << "metric value = " << metrics_[m->index()];
+//        qDebug() << "metric name = " << name;
+        qDebug() << " from pmc type = " << m->type();
+//        qDebug() << "metric value = " << metrics_[m->index()];
         if (m) {
             if (useMetricUnits) return metrics_[m->index()];
             else {
